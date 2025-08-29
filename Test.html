@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smsbomber Tool</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: radial-gradient(circle at center, #001100, #000000);
+      color: #00ff66;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Matrix falling effect */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(
+        rgba(0, 255, 100, 0.15) 1px,
+        transparent 1px
+      );
+      background-size: 3px 18px;
+      animation: matrixFall 10s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes matrixFall {
+      from { background-position-y: 0; }
+      to { background-position-y: 100%; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 95%;
+      max-width: 500px;
+      margin: 20px;
+      padding: 25px;
+      background: rgba(0, 0, 0, 0.85);
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ff66;
+      animation: glowBox 2s infinite alternate;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @keyframes glowBox {
+      from { box-shadow: 0 0 10px #00ff66; }
+      to { box-shadow: 0 0 25px #00ff66; }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      color: #00ff66;
+      text-shadow: 0 0 10px #00ff66;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+      width: 100%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #00ff66;
+      border-radius: 8px;
+      background: black;
+      color: #00ff66;
+      font-size: 16px;
+      outline: none;
+      box-shadow: inset 0 0 5px #00ff66;
+    }
+
+    input:focus {
+      border-color: #00ff99;
+      box-shadow: 0 0 10px #00ff99;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #00ff66;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 0 10px #00ff66;
+    }
+
+    button:hover {
+      background: #00cc55;
+      box-shadow: 0 0 20px #00ff66;
+      transform: scale(1.02);
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: rgba(0, 20, 0, 0.9);
+      border: 1px solid #00ff66;
+      border-radius: 8px;
+      min-height: 80px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 15px;
+      color: #00ff66;
+      box-shadow: inset 0 0 10px #00ff66;
+      display: none;
+      width: 100%;
+    }
+
+    /* Read First Section */
+    .read-first {
+      margin-top: 20px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .read-first button {
+      background: transparent;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ff66;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .read-first button:hover {
+      background: #00ff66;
+      color: black;
+    }
+
+    .note {
+      margin-top: 10px;
+      display: none;
+      padding: 15px;
+      border: 1px solid #00ff66;
+      border-radius: 8px;
+      background: rgba(0, 20, 0, 0.9);
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.5;
+      box-shadow: inset 0 0 8px #00ff66;
+      width: 100%;
+    }
+
+    /* Credits inside card */
+    .credits {
+      margin-top: 15px;
+      text-align: center;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .credits a {
+      color: #00ff66;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .credits a:hover {
+      text-shadow: 0 0 10px #00ff66;
+    }
+
+    /* Responsive adjustments */
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="tel"] {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .note {
+        font-size: 13px;
+        padding: 10px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📨 SMS Bomber Tool</h1>
+    <form id="smsForm">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="phone">Recipient Phone</label>
+      <input type="tel" id="phone" placeholder="09xxxxxxxxx" required>
+
+      <label for="amount">Number of Messages</label>
+      <input type="number" id="amount" min="1" max="100" placeholder="1-100" required>
+
+      <button type="submit">🚀 Send SMS</button>
+    </form>
+
+    <div class="output" id="outputBox">Processing...</div>
+
+    <!-- Read First Section inside card -->
+    <div class="read-first">
+      <button type="button" onclick="toggleNote()">📖 Read First</button>
+      <div class="note" id="noteBox">
+        ⚠️ <b>Note:</b> This is an <b>SMS Bomber Tool</b> that sends messages to your number or your target.  
+        <br><br>
+        Services included: <b>LBC, Joyride, PesoLending, Digido, iPeso, BuiltaMart, Cashalo</b>.  
+        <br><br>
+        ⚠️ These codes could be abused by scammers. Please use responsibly.  
+        <br><br>
+        I developed this out of curiosity. <b>Test at your own risk!</b>  
+      </div>
+    </div>
+
+    <!-- Credits inside card -->
+    <div class="credits">
+      Developed by
+      <a href="https://www.facebook.com/profile.php?id=61578619787271" target="_blank">
+        Junry Pacot
+      </a>
+    </div>
+  </div>
+  <script>
+
+    function toggleNote() {
+      const note = document.getElementById("noteBox");
+      note.style.display = (note.style.display === "block") ? "none" : "block";
+    }
+  </script>
+  </body>
+</html
